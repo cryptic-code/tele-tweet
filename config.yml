@@ -1,0 +1,37 @@
+MESSAGES:
+  START_CMD: |
+    Howdy! 👋
+    
+    Now, schedule Tweets from Telegram! 🐦
+    
+    Send a message with the following syntax to see the magic. 🪄
+    `tweet <space> <your tweet>`
+
+    Send `/help` for a full guide 😉
+
+  HELP_CMD: |
+    Howdy! 👋
+
+    *This bot helps you scheule tweets right from Telegram!* 🐦
+
+    #### Send a single tweet
+    `tweet <space> <your tweet here>`
+
+    #### Create a thread
+    `tweet <new-line> ///<first tweet> <new-line> ///<second tweet>`
+
+  INVALID_ERR: |
+    Your word is invalid❗ Try a different word.
+
+  EDIT_ERR: |
+    I do not care about edited messages. 😛
+
+  UNRECOGNIZED_ERR: |
+    beep. bop. beep. 🤖
+
+    I couldn't understand you.
+
+    Send `/help` to know the proper syntax.
+  
+  ATTACHMENT_ERR: |
+    Attachments aren't supported, my friend.
