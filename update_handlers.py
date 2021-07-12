@@ -6,6 +6,7 @@ from telegram.ext import CommandHandler, CallbackContext, MessageHandler, Filter
 from deta import Deta
 
 DETA_PROJECT_KEY = getenv("DETA_PROJECT_KEY")
+BMC_URL = "https://www.buymeacoffee.com/crypticcode"
 
 deta = Deta(DETA_PROJECT_KEY)
 
@@ -73,7 +74,6 @@ class CommandCallbacks():
         auth_url, req_token = create_auth_url()
 
         cred_db.put({'req_token': req_token}, key=str(chat_id))
-
         reply = get_reply('Auth_instructions', auth_url=auth_url)
         context.bot.send_message(chat_id=chat_id, text=reply)
 
@@ -114,32 +114,70 @@ class MessageCallbacks():
     def edits_handler(update: Update, context: CallbackContext) -> None:
         """ Handle edited messages. """
 
-        reply = get_reply('EDIT_ERR')
+        reply = get_reply('Edit_err')
         context.bot.send_message(chat_id=update.effective_message.chat_id, text=reply)
 
     @staticmethod
     def unrecognized_handler(update: Update, context: CallbackContext) -> None:
         """ Handle unrecognized messages. """
 
-        reply = get_reply('UNRECOGNIZED_ERR')
+        reply = get_reply('Unrecognized_err')
         context.bot.send_message(chat_id=update.effective_message.chat_id, text=reply)
 
     @staticmethod
     def attachment_handler(update: Update, context: CallbackContext) -> None:
         """ Handle attachments. """
         
-        reply = get_reply('ATTACHMENT_ERR')
+        reply = get_reply('Attachment_err')
         context.bot.send_message(chat_id=update.effective_message.chat_id, text=reply)
 
     @staticmethod
-    def tweet_handler(update: Update, context: CallbackContext):
+    def tweet_handler(update: Update, context: CallbackContext) -> None:
         """ Reply with the link to the tweet sent. """
 
         chat_id = update.effective_message.chat_id
         auth = cred_db.get(str(chat_id))
 
+        if auth and auth.get('access_token'):
+            msg_txt = update.effective_message.text
+            temp = msg_txt.split('\n\n')
+            tweets = ''.join(temp[1:])
+            tweets = tweets.split('///')
+
+            if len(tweets) > 1:
+                is_thread = True
+            else:
+                is_thread = False
+
+            response = validate_tweets(tweets)
+            reply = handle_validity_response(response, is_thread)
+
+            if not reply:
+                response = post_tweets(auth, tweets)
+
+                if response["error"]:
+                    reply = get_reply("Tweet_err")
+                elif is_thread:
+                    reply = get_reply("Tweet_thread_success", tweet_url=response['tweet_url'], bmc_url=BMC_URL)
+                else:
+                    reply = get_reply("Tweet_sucess", tweet_url=response['tweet_url'], bmc_url=BMC_URL)
+
+                record = chats_db.get(str(chat_id))
+                record['tweet_count']+=response['tweet_coutnt']
+                chats_db.put(record, key=str(chat_id))
+        else:
+            reply = get_reply("Auth_missing_err", first_name=update.effective_message.from_user.first_name)
+
+        context.bot.send_message(chat_id=chat_id, text=reply)
+
+    @staticmethod
+    def scan_tweet_handler(update: Update, context: CallbackContext) -> None:
+        """ Send the status if the received tweet(s) is within character limit. """
+
         msg_txt = update.effective_message.text
-        tweets = msg_txt.split('\n\n///\n\n')
+        temp = msg_txt.split('\n\n')
+        tweets = ''.join(temp[1:])
+        tweets = tweets.split('///')
 
         if len(tweets) > 1:
             is_thread = True
@@ -150,51 +188,30 @@ class MessageCallbacks():
         reply = handle_validity_response(response, is_thread)
 
         if not reply:
-            response = post_tweets(auth, tweets)
+            reply = get_reply('Tweet_valid')
 
-            if response["error"]:
-                reply = get_reply("Tweet_err")
-            elif is_thread:
-                reply = get_reply("Tweet_thread_success", tweet_url=response['tweet_url'])
-            else:
-                reply = get_reply("Tweet_sucess", tweet_url=response['tweet_url'])
-
-            record = chats_db.get(str(chat_id))
-            record['tweet_count']+=response['tweet_coutnt']
-            chats_db.put(record, key=str(chat_id))
-
-        context.bot.send_message(chat_id=chat_id, text=reply)
-
-    @staticmethod
-    def scan_tweet_handler(update: Update, context: CallbackContext) -> None:
-        """ Send the status if the received tweet(s) is within character limit. """
-
-        msg_txt = update.effective_message.text
-        tweets = msg_txt.split('\n\n///\n\n')
-
-        response = validate_tweets(tweets)
-        reply = handle_validity_response(response)
-
-        context.bot.send_message(chat_id=update.message.chat_id, text=reply)
+        context.bot.send_message(chat_id=update.effective_message.chat_id, text=reply)
 
 # Command Handlers
-start_cmd_handler = CommandHandler(command='start', callback=CommandCallbacks.start_cmd, filters=(~Filters.update.edited_message))
+start_cmd_handler = CommandHandler(command='start', callback=CommandCallbacks.start_cmd_handler, filters=(~Filters.update.edited_message))
 
-help_cmd_handler = CommandHandler(command='help', callback=CommandCallbacks.help_cmd, filters=(~Filters.update.edited_message))
+help_cmd_handler = CommandHandler(command='help', callback=CommandCallbacks.help_cmd_handler, filters=(~Filters.update.edited_message))
 
 auth_cmd_handler = CommandHandler(command='auth', callback=CommandCallbacks.auth_cmd_handler, filters=(~Filters.update.edited_message))
 
 verify_cmd_handler = CommandHandler(command='verify', callback=CommandCallbacks.verify_cmd_hanlder, filters=(~Filters.update.edited_message))
 
-tweet_cmd_handler = CommandHandler(command='tweet', callback=CommandCallbacks.tweet_cmd, filters=(~Filters.update.edited_message))
+tweet_cmd_handler = CommandHandler(command='tweet', callback=CommandCallbacks.tweet_cmd_handler, filters=(~Filters.update.edited_message))
+
+stats_cmd_handler = CommandHandler(command='stats', callback=CommandCallbacks.stats_cmd_handler, filters=(~Filters.update.edited_message))
 
 # Message Handlers
 edits_handler = MessageHandler(filters=(Filters.update.edited_message), callback=MessageCallbacks.edits_handler)
 
 attachment_handler = MessageHandler(filters=(Filters.attachment), callback=MessageCallbacks.attachment_handler)
 
-tweet_handler = MessageHandler(filters=(Filters.text & Filters.regex('^tweet\n\n|^Tweet\n\n') &~ Filters.update.edited_message), callback=MessageCallbacks.tweet_handler)
+tweet_handler = MessageHandler(filters=(Filters.text & Filters.regex('^tweet|^Tweet') &~ Filters.update.edited_message), callback=MessageCallbacks.tweet_handler)
 
-scan_tweet_handler = MessageHandler(filters=(Filters.text & Filters.regex('^scan\n\n|^Scan\n\n') &~ Filters.update.edited_message), callback=MessageCallbacks.scan_tweet_handler)
+scan_tweet_handler = MessageHandler(filters=(Filters.text & Filters.regex('^scan|^Scan') &~ Filters.update.edited_message), callback=MessageCallbacks.scan_tweet_handler)
 
 unrecognized_hanlder = MessageHandler(filters=(Filters.text &~ Filters.update.edited_message), callback=MessageCallbacks.unrecognized_handler)

@@ -29,3 +29,8 @@ ADMIN_PASS=<your-password-here>
 #### Webhook Registration
 
 While running first time, just hit the index of your app's url to register the webhook with Telegram.
+
+#### Characters to be escaped in MarkdownV2
+```
+_  *  [  ]  (  )  ~  `  >  #  +  -  =  |  {  }  .  !
+```

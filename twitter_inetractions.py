@@ -2,12 +2,13 @@ from os import getenv
 import tweepy
 
 TWITTER_KEY = getenv('TWITTER_KEY')
-TWITTER_SECRET = getenv("TWITTER_ENV")
+TWITTER_SECRET = getenv("TWITTER_SECRET")
 
 auth = tweepy.OAuthHandler(TWITTER_KEY, TWITTER_SECRET)
 
 def validate_tweets(tweets: list) -> dict:
     for tweet in tweets:
+        tweet = tweet.strip('\n ')
         if len(tweet) > 280:
             return {"error": True, "msg_index": str(tweets.index(tweet)+1), "msg_len": str(len(tweet))}
     return {"error": False}
@@ -24,7 +25,8 @@ def post_tweets(auth: dict, tweets: list) -> dict:
 
     if not len(tweets) > 1:
         try:
-            tweet = api.update_status(status=tweets[0])
+            tweet = tweets[0].strip('\n ')
+            tweet = api.update_status(status=tweet)
             screen_name = tweet.user.screen_name
             tweet_id = tweet.id_str
             tweet_url = f"https://twitter.com/{screen_name}/status/{tweet_id}"
@@ -33,13 +35,15 @@ def post_tweets(auth: dict, tweets: list) -> dict:
             error = True
     else:
         try:
-            start_tweet = api.update_status(status=tweets[0])
+            start_tweet = tweets[0].strip('\n ')
+            start_tweet = api.update_status(status=start_tweet)
             screen_name = start_tweet.user.screen_name
             tweet_id = start_tweet.id_str
             tweet_url = f"https://twitter.com/{screen_name}/status/{tweet_id}"
             tweet_count+=1
 
             for tweet in tweets[1:]:
+                tweet = tweet.strip('\n ')
                 api.update_status(status=tweet, in_reply_to_status_id=tweet_id)
                 tweet_count+=1
         except:
