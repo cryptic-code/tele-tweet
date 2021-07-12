@@ -18,14 +18,14 @@ app = Flask(__name__)
 def index():
     if request.method == "POST":
         try:
-            if request.headers['deleteWebhook'] == ADMIN_PASS:
+            if request.headers['deletewebhook'] == ADMIN_PASS:
                 bot.delete_webhook(drop_pending_updates=True)
                 return "Bye, bye!"
         except:
             return "POST request!?"
     else:
         try:
-            if request.headers['setWebhook'] == ADMIN_PASS:
+            if request.headers['setwebhook'] == ADMIN_PASS:
                 bot.set_webhook(url=APP_URL+'telegram-dict', drop_pending_updates=True)
                 return "Hola!"
         except:

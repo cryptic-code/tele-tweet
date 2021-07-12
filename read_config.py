@@ -8,14 +8,15 @@ with open('config.yml', 'r') as f:
 config = yaml.safe_load(stream)
 logger.debug("Parsed config.yml")
 
-def get_reply(msg_type: str, params: dict = None) -> str:
+def get_reply(msg: str, **kwargs) -> str:
     """ Replace placeholders in the reply template with actual values. """
-    
-    reply = config['MESSAGES'][msg_type]
-    if params:
+
+    reply = config['MESSAGES'][msg]
+    if kwargs:
         for var_count in range(reply.count('{')):
             placeholder = reply[reply.find('{') : reply.find('}')+1]
             var_name = placeholder[1:len(placeholder)-1]
-            reply = reply.replace(placeholder, params[var_name])
+            reply = reply.replace(placeholder, kwargs[var_name])
+
     logger.debug("Built a reply.")
     return reply

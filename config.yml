@@ -1,37 +1,98 @@
 MESSAGES:
-  START_CMD: |
-    Howdy! 👋
-    
-    Now, schedule Tweets from Telegram! 🐦
-    
+  Start_cmd: |
+    Howdy, {first_name}! 👋
+
+    Now, send and schedule Tweets right from Telegram! ⏳🐦
+
     Send a message with the following syntax to see the magic. 🪄
     `tweet <space> <your tweet>`
 
-    Send `/help` for a full guide 😉
+    Or send `/help` for a full guide 😉
 
-  HELP_CMD: |
-    Howdy! 👋
+  Start_cmd_welcome: |
+    Hi, {first_name}! 👋
 
-    *This bot helps you scheule tweets right from Telegram!* 🐦
+    I guess we are already connected, you do not need to re-authorize to start sending tweets.
 
-    #### Send a single tweet
+    Send `/help` for a list of commands. 😉
+
+  Help_cmd: |
+    Howdy, {first_name}! 👋
+
+    With me, you can now send and schedule tweets right from Telegram! ⏳🐦
+
+    Use the given syntaxes to see the magic. 🪄
+
+    *Send a single tweet*
     `tweet <space> <your tweet here>`
 
-    #### Create a thread
+    *Create a thread*
     `tweet <new-line> ///<first tweet> <new-line> ///<second tweet>`
 
-  INVALID_ERR: |
-    Your word is invalid❗ Try a different word.
+  Edit_err: |
+    Edited a message with a bot? 😂
 
-  EDIT_ERR: |
-    I do not care about edited messages. 😛
-
-  UNRECOGNIZED_ERR: |
+  Unrecognized_err: |
     beep. bop. beep. 🤖
 
     I couldn't understand you.
 
     Send `/help` to know the proper syntax.
-  
-  ATTACHMENT_ERR: |
+
+  Attachment_err: |
     Attachments aren't supported, my friend.
+
+  App_err: |
+    Seems like something's wrong. Drop me a message at @cryptic_code and I will fix it ASAP.
+
+  Auth_missing_err: |
+    Hey, {first_name}! You first need to connect me to your Twitter account!
+
+  Auth_instructions: |
+    Alright, here are the steps for authorization:
+
+    1. Go to the URL at the bottom o this message
+    2. Login to your Twitter account
+    3. Authorize this bot to connect to your Twitter account.
+    4. Send back the code to me `/code <your-code-here>` syntax
+    5. That's it!
+
+    {auth_url}
+
+  Auth_sucess: |
+    Yay!🥳 Authorization was successful.
+
+  Auth_err: |
+    Authorization failed! Please, try again.
+
+  Tweet_sucess: |
+    Tweeted your tweet! ✅
+
+    Here's the link:
+    {tweet_url}
+
+    Like this bot? Buy me a coffee ☕ at:
+    {bmc_url}
+  
+  Tweet_thread_success: |
+    Tweeted your thread! ✅
+
+    Here's the link:
+    {tweet_url}
+  
+  Tweet_err: |
+    Seem's like something's wrong with the Twitter API. Drop me a message @cryptic_code and I will look into it.
+  
+  Tweet_lengthy: |
+    Oops! Your tweet seems to have {msg_len} charcters. Trim it down to 280 characters or create a thread.
+
+  Tweet_thread_lengthy: |
+    Oops! Your {msg_index}th tweet seems to have {msg_len} charcters. Trim it down to 280 characters or create a thread.
+
+  Tweet_valid: |
+    Sharp! Your tweet(s) is/are within the 280 character limit.
+
+  Stats_cmd: |
+    Soo...
+
+    You have sent {tweet_count} tweets with me till now.
