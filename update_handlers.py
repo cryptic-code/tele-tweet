@@ -106,6 +106,16 @@ class CommandCallbacks():
 
         context.bot.send_message(chat_id=chat_id, text=reply)
 
+    @staticmethod
+    def samples_cmd_handler(update: Update, context: CallbackContext) -> None:
+        """ Handle `/samples` command. """
+
+        reply_1 = get_reply('Sample_tweet')
+        reply_2 = get_reply('Sample_thread')
+
+        context.bot.send_message(chat_id=update.effective_message.chat_id, reply_to_message_id=update.effective_message.message_id, text=reply_1, parse_mode='HTML')
+        context.bot.send_message(chat_id=update.effective_message.chat_id, reply_to_message_id=update.effective_message.message_id, text=reply_2, parse_mode='HTML')
+
 class MessageCallbacks():
     def __init__(self) -> None:
         pass
@@ -171,7 +181,7 @@ class MessageCallbacks():
         context.bot.send_message(chat_id=chat_id, text=reply)
 
     @staticmethod
-    def scan_tweet_handler(update: Update, context: CallbackContext) -> None:
+    def scan_handler(update: Update, context: CallbackContext) -> None:
         """ Send the status if the received tweet(s) is within character limit. """
 
         msg_txt = update.effective_message.text
@@ -205,6 +215,8 @@ tweet_cmd_handler = CommandHandler(command='tweet', callback=CommandCallbacks.tw
 
 stats_cmd_handler = CommandHandler(command='stats', callback=CommandCallbacks.stats_cmd_handler, filters=(~Filters.update.edited_message))
 
+samples_cmd_handler = CommandHandler(command='samples', callback=CommandCallbacks.samples_cmd_handler, filters=(~Filters.update.edited_message))
+
 # Message Handlers
 edits_handler = MessageHandler(filters=(Filters.update.edited_message), callback=MessageCallbacks.edits_handler)
 
@@ -212,6 +224,6 @@ attachment_handler = MessageHandler(filters=(Filters.attachment), callback=Messa
 
 tweet_handler = MessageHandler(filters=(Filters.text & Filters.regex('^tweet|^Tweet') &~ Filters.update.edited_message), callback=MessageCallbacks.tweet_handler)
 
-scan_tweet_handler = MessageHandler(filters=(Filters.text & Filters.regex('^scan|^Scan') &~ Filters.update.edited_message), callback=MessageCallbacks.scan_tweet_handler)
+scan_handler = MessageHandler(filters=(Filters.text & Filters.regex('^scan|^Scan') &~ Filters.update.edited_message), callback=MessageCallbacks.scan_handler)
 
 unrecognized_hanlder = MessageHandler(filters=(Filters.text &~ Filters.update.edited_message), callback=MessageCallbacks.unrecognized_handler)

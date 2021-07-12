@@ -34,20 +34,20 @@ MESSAGES:
     *Scheduling Tweets*
     You can use Telegram's built\-in "Schedule Send" feature to achieve that\.
 
-    *See if your tweets are valid beforehand (for scheduling)*
+    *See if your tweets are valid beforehand \(for scheduling\)*
     Same syntax as sending out a tweet/thread, just start the message with `Scan` instead of `Tweet`\.
 
     *See samples*
-    Send `/samples` to see sample messages/tweets to send.
+    Send `/samples` to see sample messages/tweets to send\.
 
     *Authorize the Bot*
-    Send `/auth` to authorize/re-authorize the bot with your Twitter account.
+    Send `/auth` to authorize/re\-authorize the bot with your Twitter account\.
 
     *Verify Authorization*
-    Send `/verify <space> <your code>` to complete the authorization.
+    Send `/verify <space> <your code>` to complete the authorization\.
 
     *See your stats*
-    Send `/stats` to see the number of tweets you sent with this bot.
+    Send `/stats` to see the number of tweets you sent with this bot\.
 
   Stats_cmd: |
     Soo\.\.\.
@@ -121,3 +121,19 @@ MESSAGES:
 
   Tweet_valid: |
     Sharp! Your tweet(s) is/are within the 280 character limit\.
+
+  Sample_tweet: |
+    Tweet
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque at hendrerit quam. Aenean dolor dui, tempus sed lectus eu, ornare elementum nulla.
+
+  Sample_thread: |
+    Tweet
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque at hendrerit quam.
+
+    ///
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque at hendrerit quam.
+
+    ///
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque at hendrerit quam.
