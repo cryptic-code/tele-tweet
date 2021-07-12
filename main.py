@@ -42,7 +42,7 @@ def set_commands():
 def set_webhook_handler():
     try:
         if request.headers[pass_header] == ADMIN_PASS:
-            bot.set_webhook(url=APP_URL+'telegram-dict', drop_pending_updates=True)
+            bot.set_webhook(url=APP_URL+'/tele-tweet', drop_pending_updates=True)
             return "Webhook Set"
     except:
         return "Eh!"

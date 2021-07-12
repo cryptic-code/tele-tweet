@@ -29,7 +29,7 @@ def set_bot_commands():
     help_cmd = BotCommand('help', 'Get help on using the bot.')
     stats_cmd = BotCommand('stats', 'See your tweeting stats.')
     auth_cmd = BotCommand('auth', "Authorize the bot with Twitter account.")
-    samples_cmd = BotCommand('samples', "See the sample messages/tweets to know the syntax.")
+    samples_cmd = BotCommand('samples', "Sample msgs to understand syntax.")
 
     commands = (help_cmd, stats_cmd, auth_cmd, samples_cmd)
 
