@@ -31,21 +31,27 @@ def handle_update():
 
 @app.route('/set-commands')
 def set_commands():
-    if request.headers[pass_header] == ADMIN_PASS:
-        set_bot_commands()
-        return "Commands Set"
-    return "Eh!"
+    try:
+        if request.headers[pass_header] == ADMIN_PASS:
+            set_bot_commands()
+            return "Commands Set"
+    except:
+        return "Eh!"
 
 @app.route('/set-webhook')
 def set_webhook_handler():
-    if request.headers[pass_header] == ADMIN_PASS:
-        bot.set_webhook(url=APP_URL+'telegram-dict', drop_pending_updates=True)
-        return "Webhook Set"
-    return "Eh!"
+    try:
+        if request.headers[pass_header] == ADMIN_PASS:
+            bot.set_webhook(url=APP_URL+'telegram-dict', drop_pending_updates=True)
+            return "Webhook Set"
+    except:
+        return "Eh!"
 
 @app.route('/delete-webhook')
 def delete_webhook_handler():
-    if request.header[pass_header] == ADMIN_PASS:
-        bot.delete_webhook(drop_pending_updates=True)
-        return "Webhook Deleted"
-    return "Eh!"
+    try:
+        if request.header[pass_header] == ADMIN_PASS:
+            bot.delete_webhook(drop_pending_updates=True)
+            return "Webhook Deleted"
+    except:
+        return "Eh!"
