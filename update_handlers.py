@@ -48,6 +48,7 @@ class CommandCallbacks():
         else:
             chats_db.put({'tweet_count': 0}, key=str(chat_id))
             reply = get_reply('Start_cmd', first_name=sender_first_name)
+
         context.bot.send_message(chat_id=update.effective_message.chat_id, text=reply)
 
     @staticmethod
@@ -56,14 +57,16 @@ class CommandCallbacks():
 
         sender_first_name = update.message.from_user.first_name
         reply = get_reply('Help_cmd', first_name=sender_first_name)
-        update.effective_message.reply_markdown_v2(reply)
+
+        update.effective_message.reply_markdown_v2(reply, quote=True)
 
     @staticmethod
     def tweet_cmd_handler(update: Update, context: CallbackContext) -> None:
         """ Handle `/tweet` commmand. """
 
         reply = get_reply('Tweet_cmd')
-        update.effective_message.reply_markdown_v2(reply)
+
+        update.effective_message.reply_text(reply, quote=True)
     
     @staticmethod
     def auth_cmd_handler(update: Update, context: CallbackContext) -> None:
@@ -74,7 +77,8 @@ class CommandCallbacks():
 
         cred_db.put({'req_token': req_token}, key=str(chat_id))
         reply = get_reply('Auth_instructions', auth_url=auth_url)
-        update.effective_message.reply_markdown_v2(reply)
+
+        update.effective_message.reply_text(reply, quote=True)
 
     @staticmethod
     def verify_cmd_hanlder(update: Update, context: CallbackContext) -> None:
@@ -92,7 +96,7 @@ class CommandCallbacks():
         else:
             reply = get_reply('Auth_err')
 
-        update.effective_message.reply_markdown_v2(reply)
+        update.effective_message.reply_text(reply, quote=True)
 
     @staticmethod
     def stats_cmd_handler(update: Update, context: CallbackContext) -> None:
@@ -101,9 +105,9 @@ class CommandCallbacks():
         chat_id = update.effective_message.chat_id
         record = chats_db.get(str(chat_id))
 
-        reply = get_reply('Stats_cmd', tweet_count=record['tweet_count'])
+        reply = get_reply('Stats_cmd', tweet_count=str(record['tweet_count']))
 
-        update.effective_message.reply_markdown_v2(reply)
+        update.effective_message.reply_text(reply, quote=True)
 
     @staticmethod
     def samples_cmd_handler(update: Update, context: CallbackContext) -> None:
@@ -112,8 +116,8 @@ class CommandCallbacks():
         reply_1 = get_reply('Sample_tweet')
         reply_2 = get_reply('Sample_thread')
 
-        update.effective_message.reply_html(reply_1)
-        update.effective_message.reply_html(reply_2)
+        update.effective_message.reply_text(reply_1, quote=True)
+        update.effective_message.reply_text(reply_2, quote=True)
 
 class MessageCallbacks():
     def __init__(self) -> None:
@@ -124,21 +128,24 @@ class MessageCallbacks():
         """ Handle edited messages. """
 
         reply = get_reply('Edit_err')
-        update.effective_message.reply_markdown_v2(reply)
+
+        update.effective_message.reply_text(reply, quote=True)
 
     @staticmethod
     def unrecognized_handler(update: Update, context: CallbackContext) -> None:
         """ Handle unrecognized messages. """
 
         reply = get_reply('Unrecognized_err')
-        update.effective_message.reply_markdown_v2(reply)
+
+        update.effective_message.reply_text(reply, quote=True)
 
     @staticmethod
     def attachment_handler(update: Update, context: CallbackContext) -> None:
         """ Handle attachments. """
         
         reply = get_reply('Attachment_err')
-        update.effective_message.reply_markdown_v2(reply)
+
+        update.effective_message.reply_text(reply, quote=True)
 
     @staticmethod
     def tweet_handler(update: Update, context: CallbackContext) -> None:
@@ -150,34 +157,37 @@ class MessageCallbacks():
         if auth and auth.get('access_token'):
             msg_txt = update.effective_message.text
             temp = msg_txt.split('\n\n')
-            tweets = ''.join(temp[1:])
-            tweets = tweets.split('///')
+            if len(temp) > 1 and temp[0].lower().strip(' \n') == 'tweet':
+                tweets = ''.join(temp[1:])
+                tweets = tweets.split('///')
 
-            if len(tweets) > 1:
-                is_thread = True
-            else:
-                is_thread = False
-
-            response = validate_tweets(tweets)
-            reply = handle_validity_response(response, is_thread)
-
-            if not reply:
-                response = post_tweets(auth, tweets)
-
-                if response["error"]:
-                    reply = get_reply("Tweet_err")
-                elif is_thread:
-                    reply = get_reply("Tweet_thread_success", tweet_url=response['tweet_url'], bmc_url=BMC_URL)
+                if len(tweets) > 1:
+                    is_thread = True
                 else:
-                    reply = get_reply("Tweet_sucess", tweet_url=response['tweet_url'], bmc_url=BMC_URL)
+                    is_thread = False
 
-                record = chats_db.get(str(chat_id))
-                record['tweet_count']+=response['tweet_coutnt']
-                chats_db.put(record, key=str(chat_id))
+                response = validate_tweets(tweets)
+                reply = handle_validity_response(response, is_thread)
+
+                if not reply:
+                    response = post_tweets(auth, tweets)
+
+                    if response["error"]:
+                        reply = get_reply("Tweet_err")
+                    elif is_thread:
+                        reply = get_reply("Tweet_thread_success", tweet_url=response['tweet_url'], bmc_url=BMC_URL)
+                    else:
+                        reply = get_reply("Tweet_success", tweet_url=response['tweet_url'], bmc_url=BMC_URL)
+
+                    record = chats_db.get(str(chat_id))
+                    record['tweet_count']+=response['tweet_count']
+                    chats_db.put(record, key=str(chat_id))
+            else:
+                reply = get_reply('Unrecognized_err')
         else:
             reply = get_reply("Auth_missing_err", first_name=update.effective_message.from_user.first_name)
 
-        update.effective_message.reply_markdown_v2(reply)
+        update.effective_message.reply_text(reply, quote=True)
 
     @staticmethod
     def scan_handler(update: Update, context: CallbackContext) -> None:
@@ -199,7 +209,7 @@ class MessageCallbacks():
         if not reply:
             reply = get_reply('Tweet_valid')
 
-        update.effective_message.reply_markdown_v2(reply)
+        update.effective_message.reply_text(reply, quote=True)
 
 # Command Handlers
 start_cmd_handler = CommandHandler(command='start', callback=CommandCallbacks.start_cmd_handler, filters=(~Filters.update.edited_message))

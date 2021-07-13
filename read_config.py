@@ -18,5 +18,5 @@ def get_reply(msg: str, **kwargs) -> str:
             var_name = placeholder[1:len(placeholder)-1]
             reply = reply.replace(placeholder, kwargs[var_name])
 
-    logger.debug("Built a reply.")
+    logger.debug(f"Built a reply: {msg}")
     return reply

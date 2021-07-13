@@ -1,18 +1,18 @@
 MESSAGES:
   Start_cmd: |
-    Howdy, {first_name}\! 👋
+    Howdy, {first_name}! 👋
 
-    Now, send and schedule Tweets right from Telegram\! ⏳🐦
+    Now, send and schedule Tweets right from Telegram! ⏳🐦
 
-    Send a message with the following syntax to see the magic\. 🔮
+    Send a message with the following syntax to see the magic. 🔮
     `Tweet <enter> <enter> <your tweet>`
 
     Or send `/help` for a full guide 😉
 
   Start_cmd_welcome: |
-    Hi, {first_name}\! 👋
+    Hi, {first_name}! 👋
 
-    I guess we are already connected, you might not need to re\-authorize to start sending tweets\.
+    I guess we are already connected, you might not need to re-authorize to start sending tweets.
 
     Send `/help` for the guide 😉
 
@@ -50,50 +50,48 @@ MESSAGES:
     Send `/stats` to see the number of tweets you sent with this bot\.
 
   Stats_cmd: |
-    Soo\.\.\.
-
-    You have sent {tweet_count} tweets with me till now\.
+    You have sent {tweet_count} tweet(s) with me till now 👀
 
   Edit_err: |
     Edited a message sent to a bot? 😂
 
   Unrecognized_err: |
-    beep\. bop\. 🤖
+    beep. bop. 🤖
 
-    I couldn't understand you\.
+    I couldn't understand you.
 
-    Send `/help` to know the proper syntax\.
+    Send `/help` to know the proper syntax.
 
   Attachment_err: |
-    Attachments aren't yet supported, my friend\.
+    Attachments aren't yet supported, my friend.
 
   App_err: |
-    Seems like something's wrong. Drop me a message at @cryptic\_code and I will fix it ASAP\.
+    Seems like something's wrong. Drop me a message at @cryptic_code and I will fix it ASAP.
 
   Auth_missing_err: |
-    Hey, {first_name}\! You first need to connect me to your Twitter account\!
+    Hey, {first_name}! You first need to connect me to your Twitter account!
 
     Send `/auth` or `/help`
 
   Auth_instructions: |
-    *Alright, here are the steps for authorization:*
+    Alright, here are the steps for authorization:
 
-    1\. Go to the URL at the bottom of this message
-    2\. Login to your Twitter account
-    3\. Authorize this bot to connect to your Twitter account
-    4\. Send back the code you receive in a message with `/verify <your-code-here>` syntax
-    5\. And, that's it\!
+    1. Go to the URL at the bottom of this message
+    2. Login to your Twitter account
+    3. Authorize this bot to connect to your Twitter account
+    4. Send back the code you receive in a message with `/verify <your-code-here>` syntax
+    5. And, that's it!
 
-    [Authorization URL]({auth_url})
+    {auth_url}
 
-  Auth_sucess: |
-    Yay\!🥳 Authorization was successful\.
+  Auth_success: |
+    Yay!🥳 Authorization was successful.
 
   Auth_err: |
-    Authorization failed\! Please, try again\.
+    Authorization failed! Please, try again.
 
-  Tweet_sucess: |
-    Tweeted your tweet\! ✅
+  Tweet_success: |
+    Tweeted your tweet! ✅
 
     Here's the link:
     {tweet_url}
@@ -102,7 +100,7 @@ MESSAGES:
     {bmc_url}
   
   Tweet_thread_success: |
-    Tweeted your thread\! ✅
+    Tweeted your thread! ✅
 
     Here's the link:
     {tweet_url}
@@ -111,16 +109,16 @@ MESSAGES:
     {bmc_url}
   
   Tweet_err: |
-    Seem's like something's wrong with the Twitter API\. Drop me a message @cryptic_code and I will look into it\.
+    Seem's like something's wrong with the Twitter API. Drop me a message @cryptic_code and I will look into it.
   
   Tweet_lengthy: |
-    Oops\! Your tweet seems to have {msg_len} charcters\. Trim it down to 280 characters or create a thread\.
+    Oops! Your tweet seems to have {msg_len} charcters. Trim it down to 280 characters or create a thread.
 
   Tweet_thread_lengthy: |
-    Oops\! Your {msg_index}th tweet seems to have {msg_len} charcters\. Trim it down to 280 characters or create a thread\.
+    Oops! Your {msg_index}th tweet seems to have {msg_len} charcters. Trim it down to 280 characters or create a thread.
 
   Tweet_valid: |
-    Sharp! Your tweet(s) is/are within the 280 character limit\.
+    Sharp! Your tweet(s) is/are within the 280 character limit.
 
   Sample_tweet: |
     Tweet

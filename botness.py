@@ -5,7 +5,7 @@ from update_handlers import *
 
 TELEGRAM_TOKEN = getenv('TELEGRAM_TOKEN')
 
-defaults = Defaults(parse_mode='MarkdownV2')
+defaults = Defaults(disable_web_page_preview=True)
 bot = ExtBot(token=TELEGRAM_TOKEN, defaults=defaults)
 dp = Dispatcher(bot, None, workers=0)
 

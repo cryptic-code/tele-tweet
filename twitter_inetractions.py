@@ -7,16 +7,20 @@ TWITTER_SECRET = getenv("TWITTER_SECRET")
 auth = tweepy.OAuthHandler(TWITTER_KEY, TWITTER_SECRET)
 
 def validate_tweets(tweets: list) -> dict:
+    """ Validate tweets for length. """
+    
     for tweet in tweets:
         tweet = tweet.strip('\n ')
         if len(tweet) > 280:
             return {"error": True, "msg_index": str(tweets.index(tweet)+1), "msg_len": str(len(tweet))}
     return {"error": False}
 
-def post_tweets(auth: dict, tweets: list) -> dict:
+def post_tweets(saved_auth: dict, tweets: list) -> dict:
     """ Post a tweet/thread and return its link. """
 
-    auth.set_access_token(auth['access_token'], auth['access_token_secret'])
+    auth = tweepy.OAuthHandler(TWITTER_KEY, TWITTER_SECRET)
+
+    auth.set_access_token(saved_auth['access_token'], saved_auth['access_token_secret'])
     api = tweepy.API(auth)
 
     tweet_count = 0
@@ -31,7 +35,8 @@ def post_tweets(auth: dict, tweets: list) -> dict:
             tweet_id = tweet.id_str
             tweet_url = f"https://twitter.com/{screen_name}/status/{tweet_id}"
             tweet_count+=1
-        except:
+        except Exception as e:
+            print(e)
             error = True
     else:
         try:
@@ -44,24 +49,30 @@ def post_tweets(auth: dict, tweets: list) -> dict:
 
             for tweet in tweets[1:]:
                 tweet = tweet.strip('\n ')
-                api.update_status(status=tweet, in_reply_to_status_id=tweet_id)
+                tweet = api.update_status(status=tweet, in_reply_to_status_id=tweet_id)
+                tweet_id = tweet.id_str
                 tweet_count+=1
-        except:
-           error = True
+        except Exception as e:
+            print(e)
+            error = True
 
     return {"error": error, "tweet_url": tweet_url, 'tweet_count': tweet_count}
 
 def create_auth_url() -> dict:
-    """ Create a Twitter authorization url and send it back with the request token. """
+    """ Create a Twitter Auth URL and save the request token. """
 
+    auth = tweepy.OAuthHandler(TWITTER_KEY, TWITTER_SECRET)
     auth_url = auth.get_authorization_url()
     req_token = auth.request_token['oauth_token']
 
     return [auth_url, req_token]
 
 def authorize(req_token: str, verifier: str) -> dict:
+    """ Get access tokens to save. """
     # load auth.request_token before requesting access tokens
+    auth = tweepy.OAuthHandler(TWITTER_KEY, TWITTER_SECRET)
     auth.request_token = {'oauth_token': req_token, 'oauth_token_secret': verifier}
+    
     try:
         auth.get_access_token(verifier)
         access_token = auth.access_token
