@@ -46,7 +46,6 @@ class CommandCallbacks():
         if record:
             reply = get_reply('Start_cmd_welcome', first_name=sender_first_name)
         else:
-            chats_db.put({'tweet_count': 0}, key=str(chat_id))
             reply = get_reply('Start_cmd', first_name=sender_first_name)
 
         update.message.reply_text(reply)
@@ -91,6 +90,7 @@ class CommandCallbacks():
         auth = authorize(record['req_token'], verifier)
 
         if auth:
+            chats_db.put({'tweet_count': 0}, key=str(chat_id))
             cred_db.put(auth, key=str(chat_id))
             reply = get_reply('Auth_success')
         else:
