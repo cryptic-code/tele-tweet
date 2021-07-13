@@ -4,17 +4,16 @@ MESSAGES:
 
     Now, send and schedule Tweets right from Telegram! ⏳🐦
 
-    Send a message with the following syntax to see the magic. 🔮
-    `Tweet <enter> <enter> <your tweet>`
+    Send /auth to authenticate the bot with your Twitter account and start the magic. 🔮
 
-    Or send `/help` for a full guide 😉
+    Or send /help for a full guide 😉
 
   Start_cmd_welcome: |
     Hi, {first_name}! 👋
 
     I guess we are already connected, you might not need to re-authorize to start sending tweets.
 
-    Send `/help` for the guide 😉
+    Send /help for the guide 😉
 
   Help_cmd: |
     Howdy, {first_name}\! 👋
@@ -60,7 +59,7 @@ MESSAGES:
 
     I couldn't understand you.
 
-    Send `/help` to know the proper syntax.
+    Send /help to know the proper syntax.
 
   Attachment_err: |
     Attachments aren't yet supported, my friend.
@@ -71,18 +70,18 @@ MESSAGES:
   Auth_missing_err: |
     Hey, {first_name}! You first need to connect me to your Twitter account!
 
-    Send `/auth` or `/help`
+    Send /auth or /help
 
   Auth_instructions: |
     Alright, here are the steps for authorization:
 
-    1. Go to the URL at the bottom of this message
-    2. Login to your Twitter account
-    3. Authorize this bot to connect to your Twitter account
-    4. Send back the code you receive in a message with `/verify <your-code-here>` syntax
-    5. And, that's it!
+    1\. Open the URL at the bottom of this message
+    2\. Login to your Twitter account
+    3\. Authorize this bot to connect to your Twitter account
+    4\. Send back the code you receive in a message with the syntax: `/verify <space> <your\-code\-here>`
+    5\. And, you should be good to go\!
 
-    {auth_url}
+    [Authorization URL]({auth_url})
 
   Auth_success: |
     Yay!🥳 Authorization was successful.

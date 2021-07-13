@@ -4,7 +4,32 @@ import tweepy
 TWITTER_KEY = getenv('TWITTER_KEY')
 TWITTER_SECRET = getenv("TWITTER_SECRET")
 
-auth = tweepy.OAuthHandler(TWITTER_KEY, TWITTER_SECRET)
+auth = tweepy.OAuthHandler(TWITTER_KEY, TWITTER_SECRET, callback='oob')
+
+def create_auth_url() -> dict:
+    """ Create a Twitter Auth URL and save the request token. """
+
+    auth = tweepy.OAuthHandler(TWITTER_KEY, TWITTER_SECRET)
+    auth_url = auth.get_authorization_url()
+    req_token = auth.request_token['oauth_token']
+
+    return [auth_url, req_token]
+
+def authorize(req_token: str, verifier: str) -> dict:
+    """ Get access tokens to save. """
+    # load auth.request_token before requesting access tokens
+    auth = tweepy.OAuthHandler(TWITTER_KEY, TWITTER_SECRET)
+    auth.request_token = {'oauth_token': req_token, 'oauth_token_secret': verifier}
+    
+    try:
+        auth.get_access_token(verifier)
+        access_token = auth.access_token
+        access_token_secret = auth.access_token_secret
+        auth.set_access_token(access_token, access_token_secret)
+        return {'access_token': access_token, 'access_token_secret': access_token_secret}
+    except Exception as e:
+        print(e)
+        return None
 
 def validate_tweets(tweets: list) -> dict:
     """ Validate tweets for length. """
@@ -57,28 +82,3 @@ def post_tweets(saved_auth: dict, tweets: list) -> dict:
             error = True
 
     return {"error": error, "tweet_url": tweet_url, 'tweet_count': tweet_count}
-
-def create_auth_url() -> dict:
-    """ Create a Twitter Auth URL and save the request token. """
-
-    auth = tweepy.OAuthHandler(TWITTER_KEY, TWITTER_SECRET)
-    auth_url = auth.get_authorization_url()
-    req_token = auth.request_token['oauth_token']
-
-    return [auth_url, req_token]
-
-def authorize(req_token: str, verifier: str) -> dict:
-    """ Get access tokens to save. """
-    # load auth.request_token before requesting access tokens
-    auth = tweepy.OAuthHandler(TWITTER_KEY, TWITTER_SECRET)
-    auth.request_token = {'oauth_token': req_token, 'oauth_token_secret': verifier}
-    
-    try:
-        auth.get_access_token(verifier)
-        access_token = auth.access_token
-        access_token_secret = auth.access_token_secret
-        auth.set_access_token(access_token, access_token_secret)
-        return {'access_token': access_token, 'access_token_secret': access_token_secret}
-    except Exception as e:
-        print(e)
-        return None

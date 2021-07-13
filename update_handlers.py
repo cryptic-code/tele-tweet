@@ -49,7 +49,7 @@ class CommandCallbacks():
             chats_db.put({'tweet_count': 0}, key=str(chat_id))
             reply = get_reply('Start_cmd', first_name=sender_first_name)
 
-        context.bot.send_message(chat_id=update.effective_message.chat_id, text=reply)
+        update.message.reply_text(reply)
 
     @staticmethod
     def help_cmd_handler(update: Update, context: CallbackContext) -> None:
@@ -78,7 +78,7 @@ class CommandCallbacks():
         cred_db.put({'req_token': req_token}, key=str(chat_id))
         reply = get_reply('Auth_instructions', auth_url=auth_url)
 
-        update.effective_message.reply_text(reply, quote=True)
+        update.effective_message.reply_markdown_v2(reply, quote=True)
 
     @staticmethod
     def verify_cmd_hanlder(update: Update, context: CallbackContext) -> None:

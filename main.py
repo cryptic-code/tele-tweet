@@ -11,6 +11,7 @@ APP_URL = getenv('APP_URL')
 ADMIN_PASS = getenv('ADMIN_PASS')
 
 pass_header = 'Passkey'
+webhook_endpoint = '/tele-tweet'
 
 logger = get_logger(__name__, only_debug=True)
 
@@ -20,7 +21,7 @@ app = Flask(__name__)
 def index():
     return "Hello, World!"
 
-@app.route('/tele-tweet', methods=["POST", "GET"])
+@app.route(webhook_endpoint, methods=["POST", "GET"])
 def handle_update():
     if request.method == 'POST':
         update = Update.de_json(request.get_json(force=True), bot)
@@ -42,7 +43,7 @@ def set_commands():
 def set_webhook_handler():
     try:
         if request.headers[pass_header] == ADMIN_PASS:
-            bot.set_webhook(url=APP_URL+'/tele-tweet', drop_pending_updates=True)
+            bot.set_webhook(url=APP_URL+webhook_endpoint)
             return "Webhook Set"
     except:
         return "Eh!"
