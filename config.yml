@@ -48,6 +48,9 @@ MESSAGES:
     *See your stats*
     Send `/stats` to see the number of tweets you sent with this bot\.
 
+    You may also visit the following URL to see the screenshots of commands usage:
+    [Screenshots URL](https://aniketteredesai.com/blog/tele-tweet/#screenshots)
+
   Stats_cmd: |
     You have sent {tweet_count} tweet(s) with me till now 👀
 
