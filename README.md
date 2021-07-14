@@ -1,8 +1,12 @@
-## 🐦 Tweet from Telegram! 💙
+## 🐦 TeleTweet Bot 💙
 
-A fully functional and deployable Telegram Bot made with Flask, initially born as a afternoon-project out of boredom.
+![cover image](bot.png)
+
+A small open-source Twitter client packaged as a Telegram Bot! A project born out of boredom.
 
 With this bot, you can send and schedule your tweets and threads right from Telegram!
+
+If you like the bot, buy me a coffe☕ [here](https://www.buymeacoffee.com/crypticcode)
 
 ## Configuration ⚙
 

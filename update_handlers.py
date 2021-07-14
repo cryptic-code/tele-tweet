@@ -6,12 +6,12 @@ from telegram.ext import CommandHandler, CallbackContext, MessageHandler, Filter
 from deta import Deta
 
 DETA_PROJECT_KEY = getenv("DETA_PROJECT_KEY")
-BMC_URL = "https://www.buymeacoffee.com/crypticcode"
+BMC_URL = "https://www.buymeacoffee.com/anikett"
 
 deta = Deta(DETA_PROJECT_KEY)
 
-chats_db = deta.Base("chats")
-cred_db = deta.Base("tw_cred")
+chats_db = deta.Base("teletweet_chats")
+cred_db = deta.Base("teletweet_cred")
 
 def error_handler(update: Update, context: CallbackContext) -> None:
     """ Handle application errors. """
