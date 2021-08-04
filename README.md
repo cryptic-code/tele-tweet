@@ -47,6 +47,11 @@ All these endpoints only work with `Passkey` header set to your admin password w
 - `/delete-webhook` to delete the registered webhook.
 - `/set-commands` to set/update the registered bot's commands list.
 
+Sample request:
+```sh
+curl https://<app-url>/set-webhook -H "Passkey: <password>"
+```
+
 #### Characters to be escaped in MarkdownV2
 ```
 _  *  [  ]  (  )  ~  `  >  #  +  -  =  |  {  }  .  !
